@@ -1,6 +1,5 @@
 import org.junit.jupiter.api.Test;
 
-import static io.restassured.RestAssured.delete;
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
 import static org.hamcrest.Matchers.is;
@@ -26,8 +25,10 @@ public class ApiTest {
                 .get(URL + "api/job/4")
                 .then()
                 .log().all()
-                .statusCode(200);
+                .statusCode(200)
+                .extract().response();
     }
+
     @Test
     void createUserTest() {
         given()
@@ -39,9 +40,10 @@ public class ApiTest {
                 .then()
                 .log().all()
                 .statusCode(201)
-                .body("name", is("Anton"))
-                .body("job", is("QA"));
+                .extract().response();
+
     }
+
     @Test
     void successfulCreateUserTest() {
         given()
@@ -49,8 +51,11 @@ public class ApiTest {
                 .get(URL + "api/job/8")
                 .then()
                 .log().all()
-                .statusCode(200);
+                .statusCode(200)
+                .extract().response();
+
     }
+
     @Test
     public void updateUser() {
         given()
@@ -62,10 +67,9 @@ public class ApiTest {
                 .then()
                 .log().all()
                 .statusCode(200)
-                .body("name", is("Anton"))
-                .body("job", is("Team lead"))
-        ;
+                .extract().response();
     }
+
     @Test
     void successfulUpdateUserTest() {
         given()
@@ -73,18 +77,21 @@ public class ApiTest {
                 .get(URL + "api/job/8")
                 .then()
                 .log().all()
-                .statusCode(200);
+                .statusCode(200)
+                .extract().response();
     }
+
     @Test
     public void deleteUser() {
         given()
                 .when()
-                .delete(URL + "api/job/8")
+                .delete(URL + "api/job/9")
                 .then()
                 .log().all()
                 .statusCode(200)
-        ;
+                .extract().response();
     }
+
     @Test
     void successfulDeleteUserTest() {
         given()
@@ -92,6 +99,8 @@ public class ApiTest {
                 .get(URL + "api/job/8")
                 .then()
                 .log().all()
-                .statusCode(404);
+                .statusCode(404)
+                .extract().response();
+
     }
 }
