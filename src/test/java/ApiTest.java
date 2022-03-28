@@ -1,15 +1,22 @@
+import com.github.javafaker.Faker;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+
 
 
 public class ApiTest {
 
     private static final String URL = "https://6107f174d73c6400170d372d.mockapi.io/";
     private static final String DIR = "api/job";
+    Faker faker = new Faker();
+    String name = faker.name().firstName();
+    String job = faker.job().position();
+
+
+
     @Test
     void listUsersTest() {
         given()
@@ -17,7 +24,7 @@ public class ApiTest {
                 .get(URL + DIR)
                 .then()
                 .log().all()
-                .statusCode(200);
+                .assertThat().statusCode(200);
     }
 
     @Test
@@ -27,23 +34,21 @@ public class ApiTest {
                 .get(URL + DIR +"/4")
                 .then()
                 .log().all()
-                .statusCode(200)
+                .assertThat().statusCode(200)
                 .extract().response();
     }
 
     @Test
     void createUserTest() {
         given()
-                .contentType(JSON)
-                .body("{\"name\": \"Anton\"," +
-                        "\"job\": \"QA\"}")
+                .body(name + job)
                 .when()
                 .post(URL + DIR)
                 .then()
                 .log().all()
-                .statusCode(201).body("job", equalTo("QA"))
+                .assertThat().statusCode(201)
+                .body("id", equalTo("8"))
                 .extract().response();
-
     }
 
     @Test
@@ -53,7 +58,7 @@ public class ApiTest {
                 .get(URL + DIR + "/8")
                 .then()
                 .log().all()
-                .statusCode(200)
+                .assertThat().statusCode(200)
                 .extract().response();
 
     }
@@ -68,8 +73,9 @@ public class ApiTest {
                 .put(URL + DIR + "/8")
                 .then()
                 .log().all()
-                .statusCode(200)
+                .assertThat().statusCode(200)
                 .body("job", equalTo("Team lead"))
+                .body("name", equalTo("Anton"))
                 .extract().response();
     }
 
@@ -80,7 +86,7 @@ public class ApiTest {
                 .get(URL + "api/job/8")
                 .then()
                 .log().all()
-                .statusCode(200)
+                .assertThat().statusCode(200)
                 .extract().response();
     }
 
@@ -91,7 +97,7 @@ public class ApiTest {
                 .delete(URL + "api/job/8")
                 .then()
                 .log().all()
-                .statusCode(200)
+                .assertThat().statusCode(200)
                 .extract().response();
     }
 
@@ -102,7 +108,7 @@ public class ApiTest {
                 .get(URL + "api/job/8")
                 .then()
                 .log().all()
-                .statusCode(404)
+                .assertThat().statusCode(404)
                 .extract().response();
 
     }
