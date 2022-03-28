@@ -1,10 +1,9 @@
 import com.github.javafaker.Faker;
-import org.junit.jupiter.api.Test;
+import org.testng.annotations.Test;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
 import static org.hamcrest.Matchers.equalTo;
-
 
 
 public class ApiTest {
@@ -17,7 +16,7 @@ public class ApiTest {
 
 
 
-    @Test
+    @Test(priority = 1)
     void listUsersTest() {
         given()
                 .when()
@@ -27,7 +26,7 @@ public class ApiTest {
                 .assertThat().statusCode(200);
     }
 
-    @Test
+    @Test(priority = 2)
     void singleUserTest() {
         given()
                 .when()
@@ -38,7 +37,7 @@ public class ApiTest {
                 .extract().response();
     }
 
-    @Test
+    @Test(priority = 3)
     void createUserTest() {
         given()
                 .body(name + job)
@@ -51,7 +50,7 @@ public class ApiTest {
                 .extract().response();
     }
 
-    @Test
+    @Test(priority = 4)
     void successfulCreateUserTest() {
         given()
                 .when()
@@ -63,7 +62,7 @@ public class ApiTest {
 
     }
 
-    @Test
+    @Test(priority = 5)
     public void updateUser() {
         given()
                 .contentType(JSON)
@@ -74,12 +73,12 @@ public class ApiTest {
                 .then()
                 .log().all()
                 .assertThat().statusCode(200)
-                .body("job", equalTo("Team lead"))
+                .assertThat().body("job", equalTo("Team lead"))
                 .body("name", equalTo("Anton"))
                 .extract().response();
     }
 
-    @Test
+    @Test(priority = 6)
     void successfulUpdateUserTest() {
         given()
                 .when()
@@ -90,18 +89,18 @@ public class ApiTest {
                 .extract().response();
     }
 
-    @Test
+    @Test(priority = 7)
     public void deleteUser() {
         given()
                 .when()
-                .delete(URL + "api/job/8")
+                .delete(URL + "api/job/14")
                 .then()
                 .log().all()
                 .assertThat().statusCode(200)
                 .extract().response();
     }
 
-    @Test
+    @Test(priority = 8)
     void successfulDeleteUserTest() {
         given()
                 .when()
