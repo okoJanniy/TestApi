@@ -93,7 +93,7 @@ public class ApiTest {
     public void deleteUser() {
         given()
                 .when()
-                .delete(URL + "api/job/14")
+                .delete(URL + "api/job/8")
                 .then()
                 .log().all()
                 .assertThat().statusCode(200)
@@ -104,7 +104,7 @@ public class ApiTest {
     void successfulDeleteUserTest() {
         given()
                 .when()
-                .get(URL + "api/job/8")
+                .get(URL + "api/job/9")
                 .then()
                 .log().all()
                 .assertThat().statusCode(404)
